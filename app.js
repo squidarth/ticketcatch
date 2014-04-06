@@ -11,13 +11,13 @@ var http = require('http');
 var path = require('path');
 var childProcess = require('child_process');
 var phantomjs = require("phantomjs");
-
+var mongodb = require("mongodb").MongoClient;
 var binPath = phantomjs.path;
 
 var twilio = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_ACCT_TOKEN);
 
 var app = express();
-
+var db;
 
 console.log("express started");
 // all environments
@@ -38,6 +38,13 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+mongodb.connect("mongodb://" + process.env.MONGO_USRNAME + ":" + process.env.MONGO_PASSWORD + "@ds039037.mongolab.com:39037/heroku_app23809192", function(err, database) {
+  db =  database;
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log('Express server listening on port ' + app.get('port'));
+  });
+});
+
 app.get('/', routes.index);
 
 app.post("/registrations", function(req, resp) {
@@ -46,6 +53,11 @@ app.post("/registrations", function(req, resp) {
     req.body.license_plate,
     req.body.state
   ];
+  var collection = db.collection("registrations");
+
+  collection.insert({"license_plate" : req.body.license_plate, "phone_number" : req.body.phone_number}, function(err, docs) {
+     resp.json({success: true});
+  });
   childProcess.execFile(binPath, childArgs, function(err, stdout, stderr) {
      data = JSON.parse(stdout);
      if (data["data"].length > 1 ) {
@@ -59,12 +71,10 @@ app.post("/registrations", function(req, resp) {
          });
        }
      }
-     resp.json({success: true});
   });
 });
 
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+
+

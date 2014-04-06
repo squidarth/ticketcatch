@@ -9,7 +9,8 @@
     "express": "*",
     "jade": "*",
     "phantomjs": "*",
-    "twilio": "*"
+    "twilio": "*",
+    "mongodb" : "*"
   },
   "subdomain": "ticketcatch",
   "engines": {
