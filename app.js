@@ -16,7 +16,6 @@ var binPath = phantomjs.path;
 
 var twilio = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_ACCT_TOKEN);
 
-console.log(binPath);
 var app = express();
 
 
@@ -51,7 +50,7 @@ app.post("/registrations", function(req, resp) {
      data = JSON.parse(stdout);
      if (data["data"].length > 1 ) {
        for (var i = 0;i < data["data"].length - 1; i++) {
-         var message = "You received a ticket on " + data["data"][i]["date"] + "for $" + data["data"][i]["amount"] +
+         var message = "You received a ticket on " + data["data"][i]["date"] + " for $" + data["data"][i]["amount"] +
                       ", go to https://paydirect.link2gov.com/NYCParking-Plate/ItemSearch to pay.";
          twilio.sendMessage({
            to: "+1" + req.body.phone_number,
