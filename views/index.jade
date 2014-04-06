@@ -2,17 +2,26 @@ extends layout
 
 block content
   div(class="container")
-    h1 TicketCatch
+    div(class="page-header")
+      h1
+        a(href="/") TicketCatch
 
-    form(name="registrations", action="/registrations", method="post", class="col-lg-4")
-      div(class="form-group")
-        label License Plate Number
-        input(type="text", name="licence_number", class="form-control license-number")
-      div(class="form-group")
-        label State
-        input(type="text", name="state", class="form-control state")
-      div(class="form-group")
-        label Phone Number
-        input(type="text", name="phone_number", class="form-control phone-number")
-      input(type="submit", class="btn btn-default")
-      p(class="hidden thank-you") Thank you for submitting! We will text you relentlessly until you pay your parking tickets!
+    div(class="col-lg-6")
+      h2 Stay on top of your fines. 
+      p(class="lead") Tired of forgetting to pay your parking and speeding tickets? Enter in your
+        license plate number and we'll make sure you don't forget.
+
+    div(class="col-lg-6")
+      form(name="registrations", action="/registrations", method="post")
+        div(class="form-group")
+          label License Plate Number
+          input(type="text", name="licence_number", class="form-control license-number", placeholder="BX232H")
+        div(class="form-group")
+          label State
+          input(type="text", name="state", class="form-control state", placeholder="NY/CT/MA only")
+        div(class="form-group")
+          label Phone Number
+          input(type="number", name="phone_number", class="form-control phone-number", placeholder="1234567890")
+        input(type="submit", class="btn btn-default")
+        p(class="hidden thank-you") Thank you for submitting! We will text you relentlessly until you pay your parking tickets!
+ 
