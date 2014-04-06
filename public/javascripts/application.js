@@ -1,8 +1,8 @@
 $(document).on("ready", function() {
-   
   $("form").on("submit", function(e) {
     e.preventDefault();
 
+    $(".btn").val("Submitting...");
     $.ajax({
       method: "POST",
       url: "/registrations", 
@@ -12,7 +12,8 @@ $(document).on("ready", function() {
         license_plate: $(".license-number").val()
       }
     }).done(function(resp) {
-      console.log(resp);
+      $(".btn").val("Submit");
+      $(".thank-you").removeClass("hidden");
     });
 
     return false;
