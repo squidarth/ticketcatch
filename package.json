@@ -8,7 +8,11 @@
   "dependencies": {
     "express": "*",
     "jade": "*",
-    "phantomjs" : "*",
-    "twilio" : "*"
+    "phantomjs": "*",
+    "twilio": "*"
+  },
+  "subdomain": "ticketcatch",
+  "engines": {
+    "node": "0.10.x"
   }
 }
