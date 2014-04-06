@@ -8,7 +8,7 @@
   "dependencies": {
     "express": "*",
     "jade": "*",
-    "casper" : "*",
-    "spooky" : "*"
+    "phantomjs" : "*",
+    "twilio" : "*"
   }
 }

@@ -8,13 +8,16 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var childProcess = require('child_process');
+var phantomjs = require("phantomjs");
 
+var binPath = phantomjs.path;
+
+var twilio = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_ACCT_TOKEN);
+
+console.log(binPath);
 var app = express();
 
-var Spooky = require("spooky");
-var casper = require("casper").create();
-
-var spooky = new Spooky();
 
 console.log("express started");
 // all environments
@@ -38,13 +41,27 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 
 app.post("/registrations", function(req, resp) {
-   casper.start("http://casperjs.org", function() {
-     resp.json({success: true, title: this.getTitle()});
-   });  
-
-   casper.run();
+  var childArgs = [
+    path.join(__dirname, "phantomjs-script.js"),
+    req.body.license_plate,
+    req.body.state
+  ];
+  childProcess.execFile(binPath, childArgs, function(err, stdout, stderr) {
+     data = JSON.parse(stdout);
+     if (data["data"].length > 1 ) {
+       for (var i = 0;i < data["data"].length - 1; i++) {
+         var message = "You received a ticket on " + data["data"][i]["date"] + "for $" + data["data"][i]["amount"] +
+                      ", go to https://paydirect.link2gov.com/NYCParking-Plate/ItemSearch to pay.";
+         twilio.sendMessage({
+           to: "+1" + req.body.phone_number,
+           from: "+1415-599-2671",
+           body: message
+         });
+       }
+     }
+     resp.json({success: true});
+  });
 });
-
 
 app.get('/users', user.list);
 
