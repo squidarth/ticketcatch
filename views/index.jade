@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  div(class="container")
+
+    h1 TicketCatch
+
+    form(name="registrations", action="/registrations", method="post", class="col-lg-4")
+      div(class="form-group")
+        label License Plate Number
+        input(type="text", name="licence_number", class="form-control license-number")
+      div(class="form-group")
+        label State
+        input(type="text", name="state", class="form-control state")
+      div(class="form-group")
+        label Phone Number
+        input(type="text", name="phone_number", class="form-control phone-number")
+      input(type="submit", class="btn btn-default")
